@@ -1,0 +1,312 @@
+
+package javaapplication1;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Stack;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
+
+public class NewJFrame extends javax.swing.JFrame {
+
+    /**
+     * Creates new form NewJFrame
+     */
+    public NewJFrame() {
+       initComponents();
+       Stack urlStack1 = new Stack();
+       Stack urlStack2 = new Stack();
+       setTitle("Nuttapon Yodmuang s4050860@kmitl.ac.th - Java Web Browser (Network Programming Class Assignment#2)");
+       addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				System.exit(0);
+			}
+		} );
+        final subthread ThreadA = new subthread();
+        final subthread ThreadB = new subthread();
+        GOButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event) 
+			{
+                            try
+				{
+					// remember URL for back button
+					urlStack1.push(urlInput1.getText());
+                                        urlStack2.push(urlInput2.getText());
+                                        
+					editorPaneA.setPage(urlInput1.getText());
+                                        editorPaneB.setPage(urlInput2.getText());
+                                        
+                                        String text = "ThreadA : GO url:"+urlInput1.getText()+"\n";
+                                        AREADOOKA.append(text);
+                                        text = "ThreadB : GO url :"+urlInput2.getText()+"\n";
+                                        AREADOOKB.append(text);
+                                        URL obj_a = new URL(urlInput1.getText());
+                                        URLConnection conn_a = obj_a.openConnection();
+                                        java.util.Map<String, java.util.List<String>> map_a = conn_a.getHeaderFields();
+              
+                                        for (java.util.Map.Entry<String, java.util.List<String>> entry : map_a.entrySet()) {
+                                                AREADOOKA.append("ThreadA : " + entry.getKey() 
+                                                           + " ,Value : " + entry.getValue()+"\n");
+                                        }
+                                        
+                                        URL obj = new URL(urlInput2.getText());
+                                        URLConnection conn = obj.openConnection();
+                                        java.util.Map<String, java.util.List<String>> map = conn.getHeaderFields();
+                                        
+                                        for (java.util.Map.Entry<String, java.util.List<String>> entry : map.entrySet()) {
+                                                AREADOOKB.append("ThreadB : " + entry.getKey() 
+                                                           + " ,Value : " + entry.getValue()+"\n");
+                                        }
+                                        
+                                        ThreadA.start();
+                                        text = "ThreadA : running"+"\n";
+                                        AREADOOKA.append(text);
+                                        ThreadB.start();
+                                        text = "ThreadB : running"+"\n";
+                                        AREADOOKB.append(text);
+				}
+				catch(Exception e)
+				{
+					editorPaneA.setText("Error : " +e);
+                                        editorPaneB.setText("Error : " +e);
+				}
+			}
+
+        
+		});
+                /////// editorPane Thread 1
+		editorPaneA.setEditable(false);
+		editorPaneA.addHyperlinkListener(new HyperlinkListener()
+		{
+			public void hyperlinkUpdate(HyperlinkEvent event)
+			{
+				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+				{
+                                    try
+					{
+						urlStack1.push(event.getURL().toString());
+						urlInput1.setText(event.getURL().toString());
+ 
+						editorPaneA.setPage(event.getURL());
+					}
+					catch(IOException e)
+					{
+						editorPaneA.setText("Error : " + e);
+					}
+				}
+			}
+
+		});
+                /////// editorPane Thread 2
+		editorPaneB.setEditable(false);
+		editorPaneB.addHyperlinkListener(new HyperlinkListener()
+		{
+			public void hyperlinkUpdate(HyperlinkEvent event)
+			{
+				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+				{
+                                    try
+					{
+						urlStack2.push(event.getURL().toString());
+						urlInput2.setText(event.getURL().toString());
+ 
+						editorPaneB.setPage(event.getURL());
+					}
+					catch(IOException e)
+					{
+						editorPaneB.setText("Error: " + e);
+					}
+				}
+			}
+		});
+                
+    }
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jURLA = new javax.swing.JLabel();
+        jURLB = new javax.swing.JLabel();
+        urlInput1 = new javax.swing.JTextField();
+        GOButton = new javax.swing.JButton();
+        urlInput2 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        AREADOOKA = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        AREADOOKB = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        editorPaneA = new javax.swing.JEditorPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        editorPaneB = new javax.swing.JEditorPane();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jURLA.setText("   URL A");
+
+        jURLB.setText("   URL B");
+
+        urlInput1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                urlInput1ActionPerformed(evt);
+            }
+        });
+
+        GOButton.setText("GO");
+        GOButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GOButtonActionPerformed(evt);
+            }
+        });
+
+        urlInput2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                urlInput2ActionPerformed(evt);
+            }
+        });
+
+        AREADOOKA.setColumns(20);
+        AREADOOKA.setRows(5);
+        jScrollPane1.setViewportView(AREADOOKA);
+
+        AREADOOKB.setColumns(20);
+        AREADOOKB.setRows(5);
+        jScrollPane2.setViewportView(AREADOOKB);
+
+        jScrollPane3.setViewportView(editorPaneA);
+
+        jScrollPane4.setViewportView(editorPaneB);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(42, 42, 42)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jURLB, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(urlInput2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jURLA, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(urlInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 759, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(GOButton, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(73, 73, 73))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(urlInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jURLA))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(urlInput2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jURLB)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(GOButton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    private void urlInput1ActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    }                                         
+
+    private void GOButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    }                                        
+
+    private void urlInput2ActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    }                                         
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new NewJFrame().setVisible(true);
+            }
+        });
+    }
+    // Variables declaration - do not modify                     
+    private javax.swing.JTextArea AREADOOKA;
+    private javax.swing.JTextArea AREADOOKB;
+    private javax.swing.JButton GOButton;
+    private javax.swing.JEditorPane editorPaneA;
+    private javax.swing.JEditorPane editorPaneB;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel jURLA;
+    private javax.swing.JLabel jURLB;
+    private javax.swing.JTextField urlInput1;
+    private javax.swing.JTextField urlInput2;
+    // End of variables declaration                   
+}
